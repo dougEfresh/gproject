@@ -5,18 +5,18 @@ Package gproject provides access to toggl REST API
 
 
 Example:
-	import "github/dougEfresh/gtoggl"
-	import "github/dougEfresh/gtoggl/gproject"
+       import "gopkg.in/dougEfresh/gtoggl.v8"
+       import "ggopkg.in/dougEfresh/toggl-project.v8"
 
-	func main() {
-		thc, err := gtoggl.NewClient("token")
-		...
-		pc, err := gproject.NewClient(thc)
-		...
-		projects,err := pc.List()
-		if err == nil {
-			panic(err)
-		}
-	}
+       func main() {
+	    thc, err := gtoggl.NewClient("token")
+	    ...
+	    tc, err := gproject.NewClient(thc)
+	    ...
+	    project,err := tc.Get(1)
+	    if err == nil {
+	 	panic(err)
+	   }
+       }
 */
 package gproject
