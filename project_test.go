@@ -1,9 +1,9 @@
 package gproject
 
 import (
-	"github.com/dougEfresh/gtest"
 	"os"
 	"testing"
+	"github.com/dougEfresh/toggl-test"
 )
 
 var _, debugMode = os.LookupEnv("GTOGGL_TEST_DEBUG")
