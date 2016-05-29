@@ -3,7 +3,7 @@ package gproject
 import (
 	"encoding/json"
 	"fmt"
-	"gopkg.in/dougEfresh/gtoggl.v8"
+	"gopkg.in/dougEfresh/toggl-http-client.v8"
 )
 
 // Toggl Project Definition
@@ -21,22 +21,16 @@ const Endpoint = "/projects"
 //Return a ProjectClient. An error is also returned when some configuration option is invalid
 //    thc,err := gtoggl.NewClient("token")
 //    pc,err := gproject.NewClient(tc)
-func NewClient(thc *gtoggl.TogglHttpClient, options ...ProjectClientOptionFunc) (*ProjectClient, error) {
+func NewClient(thc *ghttp.TogglHttpClient) *ProjectClient {
 	tc := &ProjectClient{
 		thc: thc,
 	}
-	// Run the options on it
-	for _, option := range options {
-		if err := option(tc); err != nil {
-			return nil, err
-		}
-	}
 	tc.endpoint = thc.Url + Endpoint
-	return tc, nil
+	return tc
 }
 
 type ProjectClient struct {
-	thc      *gtoggl.TogglHttpClient
+	thc      *ghttp.TogglHttpClient
 	endpoint string
 }
 
@@ -82,7 +76,7 @@ func projectResponse(response *json.RawMessage, error error) (*Project, error) {
 	if error != nil {
 		return nil, error
 	}
-	var tResp gtoggl.TogglResponse
+	var tResp ghttp.TogglResponse
 	err := json.Unmarshal(*response, &tResp)
 	if err != nil {
 		return nil, err
