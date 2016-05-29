@@ -1,25 +1,18 @@
 package gproject
 
 import (
-	"os"
-	"testing"
 	"github.com/dougEfresh/toggl-test"
+	"testing"
 )
 
-var _, debugMode = os.LookupEnv("GTOGGL_TEST_DEBUG")
-
-func togglClient() *ProjectClient {
-	tu := &gtest.TestUtil{Debug: debugMode}
-	client := tu.MockClient()
-	ws, err := NewClient(client)
-	if err != nil {
-		panic(err)
-	}
-	return ws
+func togglClient(t *testing.T) *ProjectClient {
+	tu := &gtest.TestUtil{}
+	client := tu.MockClient(t)
+	return NewClient(client)
 }
 
 func TestProjectCreate(t *testing.T) {
-	tClient := togglClient()
+	tClient := togglClient(t)
 	c := &Project{Name: "Very Big Company", WId: 777}
 	nc, err := tClient.Create(c)
 	if err != nil {
@@ -40,7 +33,7 @@ func TestProjectCreate(t *testing.T) {
 }
 
 func TestProjectUpdate(t *testing.T) {
-	tClient := togglClient()
+	tClient := togglClient(t)
 	c := &Project{Id: 1, Name: "new name", WId: 777}
 	nc, err := tClient.Update(c)
 	if err != nil {
@@ -53,7 +46,7 @@ func TestProjectUpdate(t *testing.T) {
 }
 
 func TestProjectDelete(t *testing.T) {
-	tClient := togglClient()
+	tClient := togglClient(t)
 	c := &Project{Id: 1, Name: "new name", WId: 777}
 	err := tClient.Delete(c.Id)
 	if err != nil {
@@ -62,7 +55,7 @@ func TestProjectDelete(t *testing.T) {
 }
 
 func TestProjectList(t *testing.T) {
-	tClient := togglClient()
+	tClient := togglClient(t)
 	clients, err := tClient.List()
 	if err != nil {
 		t.Fatal(err)
@@ -86,7 +79,7 @@ func TestProjectList(t *testing.T) {
 }
 
 func TestProjectGet(t *testing.T) {
-	tClient := togglClient()
+	tClient := togglClient(t)
 
 	client, err := tClient.Get(1)
 	if err != nil {
@@ -98,21 +91,5 @@ func TestProjectGet(t *testing.T) {
 
 	if client.Name != "Id 1" {
 		t.Error("!= Id 1:  " + client.Name)
-	}
-}
-
-func BenchmarkClientTransport_Get(b *testing.B) {
-	b.ReportAllocs()
-	tClient := togglClient()
-	for i := 0; i < b.N; i++ {
-		tClient.Get(1)
-	}
-}
-
-func BenchmarkClientTransport_List(b *testing.B) {
-	b.ReportAllocs()
-	tClient := togglClient()
-	for i := 0; i < b.N; i++ {
-		tClient.List()
 	}
 }
