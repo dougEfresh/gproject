@@ -40,6 +40,9 @@ func (tc *ProjectClient) List() (Projects, error) {
 	if err != nil {
 		return nil, err
 	}
+	if body == nil {
+		return projects,nil
+	}
 	err = json.Unmarshal(*body, &projects)
 	return projects, err
 }
@@ -75,6 +78,9 @@ func (tc *ProjectClient) Delete(id uint64) error {
 func projectResponse(response *json.RawMessage, error error) (*Project, error) {
 	if error != nil {
 		return nil, error
+	}
+	if response == nil {
+		return nil, nil
 	}
 	var tResp ghttp.TogglResponse
 	err := json.Unmarshal(*response, &tResp)
