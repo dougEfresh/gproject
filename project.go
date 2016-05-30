@@ -41,7 +41,7 @@ func (tc *ProjectClient) List() (Projects, error) {
 		return nil, err
 	}
 	if body == nil {
-		return projects,nil
+		return projects, nil
 	}
 	err = json.Unmarshal(*body, &projects)
 	return projects, err
