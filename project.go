@@ -52,22 +52,13 @@ func (tc *ProjectClient) Get(id uint64) (*Project, error) {
 }
 
 func (tc *ProjectClient) Create(p *Project) (*Project, error) {
-	put := projectUpdateRequest{Project: p}
-	body, err := json.Marshal(put)
-	if err != nil {
-		return nil, err
-	}
-	return projectResponse(tc.thc.PostRequest(tc.endpoint, body))
+	put := map[string]interface{}{"project": p}
+	return projectResponse(tc.thc.PostRequest(tc.endpoint, put))
 }
 
 func (tc *ProjectClient) Update(p *Project) (*Project, error) {
-	put := projectUpdateRequest{Project: p}
-	body, err := json.Marshal(put)
-	if err != nil {
-		return nil, err
-	}
-
-	return projectResponse(tc.thc.PutRequest(fmt.Sprintf("%s/%d", tc.endpoint, p.Id), body))
+	put := map[string]interface{}{"project": p}
+	return projectResponse(tc.thc.PutRequest(fmt.Sprintf("%s/%d", tc.endpoint, p.Id), put))
 }
 
 func (tc *ProjectClient) Delete(id uint64) error {
@@ -93,22 +84,4 @@ func projectResponse(response *json.RawMessage, error error) (*Project, error) {
 		return nil, err
 	}
 	return &p, err
-}
-
-//Configures a Client.
-/*
-    func SetURL(url string) ToggleClientOptionFunc {
-	return func(c *TogglClient) error {
-	    c.Url = url
-	}
-    }
-*/
-type ProjectClientOptionFunc func(*ProjectClient) error
-
-type projectResponseTest struct {
-	Data []byte `json:"data"`
-}
-
-type projectUpdateRequest struct {
-	Project *Project `json:"project"`
 }
